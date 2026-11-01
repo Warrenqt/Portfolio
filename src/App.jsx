@@ -9,6 +9,7 @@ import Projects from './components/Projects'
 import Stack from './components/Stack'
 import Log from './components/Log'
 import Contact from './components/Contact'
+import ClickBurst from './components/ClickBurst'
 
 const Intro3DLetters = lazy(() => import('./components/Intro3DLetters'))
 
@@ -68,6 +69,7 @@ export default function App() {
   }, [phase])
 
   return <MotionConfig reducedMotion="user">
+    <ClickBurst />
     {phase === 'intro' && <div className="intro-overlay" role="presentation" onPointerDown={finish}>
       <div className="intro-center-dot" />
       <IntroBoundary><Suspense fallback={<FlatIntro />}><Intro3DLetters startedAt={startedAt.current} /></Suspense></IntroBoundary>

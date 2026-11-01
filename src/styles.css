@@ -14,6 +14,18 @@
 :root[data-theme="dark"] body::after { filter: invert(1); }
 :root { --ink: var(--color-ink); --accent: #ff4f00; }
 * { box-sizing: border-box; }
+.click-burst-overlay { position: fixed; inset: 0; z-index: 300; pointer-events: none; overflow: clip; }
+.click-burst { position: absolute; width: 0; height: 0; pointer-events: none; }
+.click-burst-dot { position: absolute; left: 0; top: 0; border-radius: 50%; background: var(--accent); pointer-events: none; animation: halftone-pop 550ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.click-burst-ink { background: var(--ink); }
+@keyframes halftone-pop {
+  from { transform: translate(-50%, -50%) translate(0, 0) scale(.6); opacity: 1; }
+  to { transform: translate(-50%, -50%) translate(var(--burst-x), var(--burst-y)) scale(0); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce), (hover: none) {
+  .click-burst-overlay { display: none; }
+  .click-burst-dot { animation: none; }
+}
 html { overflow-x: clip; scroll-behavior: smooth; scroll-padding-top: 95px; }
 body { margin: 0; min-width: 0; overflow-x: clip; }
 body::after { content: ''; pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: .038; background-image: url('/paper-grain.svg'); }
@@ -74,12 +86,6 @@ svg { flex-shrink: 0; }
 .portrait-hint { position: absolute; right: 12px; top: 12px; background: var(--color-paper); padding: 5px 8px; border: 1px solid var(--color-ink); opacity: 0; transition: opacity .2s; font-size: 12px; }
 @media (hover: hover) { .halftone-portrait:not(.is-assembling):hover .warm-portrait { opacity: .88; } .halftone-portrait:not(.is-assembling):hover .portrait-hint { opacity: 1; } }
 .portrait-caption { position: absolute; right: 0; bottom: -21px; font-size: 12px; letter-spacing: .045em; }
-.registration { position: absolute; width: 14px; height: 14px; z-index: 5; }
-.registration::before, .registration::after { content: ''; background: var(--color-ink); position: absolute; }
-.registration::before { top: 6px; left: 0; width: 14px; height: 1px; }
-.registration::after { left: 6px; top: 0; width: 1px; height: 14px; }
-.reg-tl { top: -7px; left: -7px; }
-.reg-br { bottom: -7px; right: -7px; }
 .hero-stamp { display: block; margin-top: clamp(24px, 3vw, 40px); text-align: right; font-size: 12px; line-height: 1.55; }
 .hero-under { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-block: 20px 34px; }
 .role-line { font-size: clamp(15px, 1.75vw, 25px); letter-spacing: -.07em; margin: 0; display: flex; align-items: center; gap: 8px; }
@@ -262,7 +268,7 @@ tbody tr + tr { border-top: 1px solid var(--border-soft); }
 .phase-intro .site-header, .phase-intro .hero { opacity: 0; }
 .phase-reveal .site-header, .phase-reveal .hero-meta, .phase-reveal .hero-under, .phase-reveal .bottom-bar, .phase-reveal .hero-foot { animation: mechanical-in .45s both; }
 .phase-reveal .hero-last { animation: name-settle .35s both; }
-.phase-reveal .portrait-caption, .phase-reveal .registration { animation: mechanical-in .25s 1.8s both; }
+.phase-reveal .portrait-caption { animation: mechanical-in .25s 1.8s both; }
 .phase-reveal .hero-under { animation-delay: .35s; }
 .phase-reveal .bottom-bar { animation-delay: .5s; }
 .phase-reveal .hero-foot { animation-delay: .6s; }

@@ -15,7 +15,7 @@ export default function Hero({ phase }) {
     <div className="hero-meta micro"><span>{portfolio.edition}</span><span className="coordinates">{portfolio.coordinates}</span></div>
     <div className="hero-stage">
       <span className="hero-side-label micro" aria-hidden="true">{portfolio.hero.label}</span>
-      <div className="portrait-composition"><span className="registration reg-tl" /><span className="registration reg-br" /><HalftonePortrait active={phase !== 'intro'} animate={phase === 'reveal'} /><HeroName /></div>
+      <div className="portrait-composition"><HalftonePortrait active={phase !== 'intro'} animate={phase === 'reveal'} /><HeroName /></div>
     </div>
     <div className="hero-under">
       <div><p className="role-line"><span className="orange">&gt;</span> {portfolio.role}<span className="cursor-block" aria-hidden="true" /></p><p className="hero-value">{portfolio.hero.discipline}</p></div>
