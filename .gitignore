@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.*.local
+.vercel/
+*.log
+.qa/
+
+# Private source documents (public/exported copies live in public/)
+Credentials/
+Updated resume.docx
+portfolio-full-prompt.md

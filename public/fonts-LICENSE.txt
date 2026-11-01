@@ -1,0 +1,7 @@
+The intro uses Archivo Black outlines converted to the Three.js typeface format.
+Copyright 2017 The Archivo Black Project Authors.
+The complete license is included in Archivo-Black-LICENSE.txt.
+
+Archivo Black and JetBrains Mono are bundled locally through @fontsource.
+Both are licensed under the SIL Open Font License, Version 1.1.
+Their complete license text is distributed in their respective packages.
