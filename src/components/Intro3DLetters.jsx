@@ -1,4 +1,4 @@
-import { Component, Suspense, useLayoutEffect, useMemo, useRef } from 'react'
+import { Component, Suspense, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useFont } from '@react-three/drei/core/useFont'
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js'
@@ -17,6 +17,18 @@ class SceneBoundary extends Component {
 }
 
 function Letters({ startedAt }) {
+  const readPalette = () => {
+    const style = getComputedStyle(document.documentElement)
+    return { ink: style.getPropertyValue('--ink').trim(), side: style.getPropertyValue('--muted').trim() }
+  }
+  const [palette, setPalette] = useState(readPalette)
+  useLayoutEffect(() => {
+    const update = () => setPalette(readPalette())
+    update()
+    const observer = new MutationObserver(update)
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+    return () => observer.disconnect()
+  }, [])
   const font = useFont(fontData)
   const meshes = useRef([])
   const group = useRef(null)
@@ -87,10 +99,10 @@ function Letters({ startedAt }) {
   })
 
   return <group ref={group}>
-    <mesh ref={seed} visible={false}><sphereGeometry args={[0.045, 12, 8]} /><meshBasicMaterial color="#111111" /></mesh>
+    <mesh ref={seed} visible={false}><sphereGeometry args={[0.045, 12, 8]} /><meshBasicMaterial color={palette.ink} toneMapped={false} /></mesh>
     {layout.glyphs.map(({ geometry }, index) => <mesh key={index} ref={mesh => { meshes.current[index] = mesh }} geometry={geometry} visible={false}>
-      <meshStandardMaterial attach="material-0" color="#171717" roughness={0.8} />
-      <meshStandardMaterial attach="material-1" color="#78756f" roughness={0.55} />
+      <meshBasicMaterial attach="material-0" color={palette.ink} toneMapped={false} />
+      <meshStandardMaterial attach="material-1" color={palette.side} roughness={0.55} />
     </mesh>)}
   </group>
 }
