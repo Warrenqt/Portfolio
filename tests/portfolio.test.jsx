@@ -39,7 +39,7 @@ describe('first-visit intro policy', () => {
     expect(screen.queryByRole('button', { name: /click or press any key/i })).toBeNull()
     expect(screen.getByRole('heading', { name: portfolio.name })).toBeTruthy()
     expect(document.querySelector('.site').hasAttribute('inert')).toBe(false)
-    expect([...document.querySelectorAll('main > section')].map(section => section.id)).toEqual(['home', 'about', 'projects', 'stack', 'log', 'contact'])
+    expect([...document.querySelectorAll('main > section')].map(section => section.id)).toEqual(['home', 'projects', 'about', 'stack', 'log', 'contact'])
   })
   it('skips on a keypress, restores scrolling, and does not replay after remounting', async () => {
     enableIntro()
@@ -86,6 +86,15 @@ describe('first-visit intro policy', () => {
 })
 
 describe('project case files', () => {
+  it('hides placeholder screenshots and unavailable links while keeping case files usable', async () => {
+    render(<Projects />)
+    expect(document.querySelector('.project-preview')).toBeNull()
+    await userEvent.setup().click(screen.getByRole('button', { name: /StreetSmart/ }))
+    expect(screen.queryByText(/coming soon/i)).toBeNull()
+    expect(screen.queryByText(/TODO:/)).toBeNull()
+    expect(document.querySelector('.case-links')).toBeNull()
+    expect(screen.getAllByText(/Solo developer/)).toHaveLength(4)
+  })
   it('opens and closes by keyboard, exposes the repository, and collapses the previous case', async () => {
     const user = userEvent.setup()
     render(<MotionConfig reducedMotion="always"><Projects /></MotionConfig>)
@@ -93,7 +102,7 @@ describe('project case files', () => {
     first.focus()
     await user.keyboard('{Enter}')
     expect(first.getAttribute('aria-expanded')).toBe('true')
-    expect(screen.getByText(/Department of Public Works and Highways, developed/)).toBeTruthy()
+    expect(screen.getByText('Photo verification with a LiteRT road-defect model')).toBeTruthy()
     const second = screen.getByRole('button', { name: /RepSynk/ })
     await user.click(second)
     expect(first.getAttribute('aria-expanded')).toBe('false')

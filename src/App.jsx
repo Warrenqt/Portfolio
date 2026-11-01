@@ -71,7 +71,7 @@ export default function App() {
     {phase === 'intro' && <div className="intro-overlay" role="presentation" onPointerDown={finish}>
       <div className="intro-center-dot" />
       <IntroBoundary><Suspense fallback={<FlatIntro />}><Intro3DLetters startedAt={startedAt.current} /></Suspense></IntroBoundary>
-      <div className="intro-meta"><span>{portfolio.version}</span><span>{portfolio.intro.loading}<span className="blink">_</span></span></div>
+      <div className="intro-meta"><span>{portfolio.edition}</span><span>{portfolio.intro.loading}<span className="blink">_</span></span></div>
       <button className="intro-skip" onClick={finish} autoFocus>{portfolio.intro.skip} <span aria-hidden="true">↗</span></button>
     </div>}
     <div className={`site phase-${phase}`} inert={phase === 'intro' ? true : undefined}>
@@ -79,8 +79,8 @@ export default function App() {
       <Nav />
       <main id="main">
         <Hero phase={phase} />
-        <About />
         <Projects />
+        <About />
         <Stack />
         <Log />
         <Contact />

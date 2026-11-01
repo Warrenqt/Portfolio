@@ -7,7 +7,7 @@ function InterestIcon({ type }) {
   const paths = {
     gym: <><path d="m8 18 4-4m16 16 4-4M13 12l15 15M9 13l6-6 5 5-6 6zm13 13 6-6 5 5-6 6zM5 16l11-11m8 30 11-11" /></>,
     gaming: <><path d="M12 12h16c5 0 8 14 6 17-3 3-7-4-9-4H15c-2 0-6 7-9 4-2-3 1-17 6-17Z" /><path d="M14 16v8m-4-4h8m8-3h.1M30 21h.1M16 12l2-5h5" /></>,
-    basketball: <><circle cx="20" cy="20" r="15" /><path d="M5 20h30M20 5v30M9 9c12 4 12 18 22 22M31 9C19 13 19 27 9 31" /></>,
+    coding: <><path d="m13 10-9 10 9 10m14-20 9 10-9 10M23 6l-6 28" /></>,
   }
   return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="square" aria-hidden="true">{paths[type]}</svg>
 }
@@ -16,7 +16,7 @@ export default function About() {
   const { about } = portfolio
   const reduced = useReducedMotion()
   return <section id="about" className="section-shell content-section" tabIndex={-1}>
-    <SectionLabel label={about.label} right={about.kicker} />
+    <SectionLabel label={about.label} />
     <Reveal className="about-grid">
       <div className="about-intro">
         <Heading>{about.title}</Heading>
@@ -33,6 +33,5 @@ export default function About() {
       </div>
     </Reveal>
     <Reveal className="interests">{about.interests.map((interest, i) => <div className="interest-tile" key={interest.id}><InterestIcon type={interest.id} /><div><span className="interest-name">{interest.name}</span><p>{interest.caption}</p></div><span className="interest-index">0{i + 1}</span></div>)}</Reveal>
-    <div className="section-metadata micro">{about.metadata}</div>
   </section>
 }

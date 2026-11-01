@@ -7,11 +7,11 @@ export function Arrow({ direction = 'up', ...props }) {
 }
 
 export function SectionLabel({ label, right }) {
-  return <div className="section-label"><span>{label}</span><span className="section-label-right">{right}</span></div>
+  return <div className="section-label"><span>{label}</span>{right && <span className="section-label-right">{right}</span>}</div>
 }
 
-export function Heading({ children, className = '' }) {
-  return <h2 className={`display section-title ${className}`}>{children}<span className="orange">.</span></h2>
+export function Heading({ children, className = '', dot = false }) {
+  return <h2 className={`display section-title ${className}`}>{children}{dot && <span className="orange">.</span>}</h2>
 }
 
 export function Reveal({ children, className = '', delay = 0 }) {

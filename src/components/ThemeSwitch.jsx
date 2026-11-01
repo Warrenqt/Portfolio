@@ -5,11 +5,10 @@ const validTheme = value => value === 'light' || value === 'dark'
 function storedTheme() {
   try { const value = localStorage.getItem(THEME_KEY); return validTheme(value) ? value : null } catch { return null }
 }
-function systemTheme() { return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light' }
 
 export default function ThemeSwitch() {
   const preference = useRef(storedTheme())
-  const [theme, setTheme] = useState(() => preference.current || systemTheme())
+  const [theme, setTheme] = useState(() => preference.current || 'light')
   const dark = theme === 'dark'
 
   useLayoutEffect(() => {
@@ -19,16 +18,13 @@ export default function ThemeSwitch() {
   }, [theme, dark])
 
   useEffect(() => {
-    const media = window.matchMedia('(prefers-color-scheme: dark)')
-    const followSystem = event => { if (!preference.current) setTheme(event.matches ? 'dark' : 'light') }
     const syncTabs = event => {
       if (event.key !== THEME_KEY && event.key !== null) return
       preference.current = validTheme(event.newValue) ? event.newValue : null
-      setTheme(preference.current || systemTheme())
+      setTheme(preference.current || 'light')
     }
-    media.addEventListener('change', followSystem)
     window.addEventListener('storage', syncTabs)
-    return () => { media.removeEventListener('change', followSystem); window.removeEventListener('storage', syncTabs) }
+    return () => window.removeEventListener('storage', syncTabs)
   }, [])
 
   const toggle = () => {

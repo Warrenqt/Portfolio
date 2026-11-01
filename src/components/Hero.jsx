@@ -3,7 +3,7 @@ import HalftonePortrait from './HalftonePortrait'
 import { Arrow, Clock } from './Shared'
 
 export function HeroName() {
-  return <h1 className="hero-name display" aria-label={portfolio.name}><span className="hero-first">{portfolio.firstName}</span>{' '}<span className="hero-last">{portfolio.lastName.join('')}</span></h1>
+  return <h1 className="hero-name display" aria-label={portfolio.name}><span className="hero-first">{portfolio.firstName}</span>{' '}<span className="hero-last orange">{portfolio.lastName.join('')}</span></h1>
 }
 
 export function BottomBar() {
@@ -16,13 +16,12 @@ export default function Hero({ phase }) {
     <div className="hero-stage">
       <span className="hero-side-label micro" aria-hidden="true">{portfolio.hero.label}</span>
       <div className="portrait-composition"><span className="registration reg-tl" /><span className="registration reg-br" /><HalftonePortrait active={phase !== 'intro'} animate={phase === 'reveal'} /><HeroName /></div>
-      <span className="hero-stamp micro" aria-hidden="true">{portfolio.hero.stamp[0]}<br />{portfolio.hero.stamp[1]}<br />{portfolio.hero.stamp[2]}</span>
     </div>
     <div className="hero-under">
-      <div><p className="role-line"><span className="orange">&gt;</span> {portfolio.role}<span className="cursor-block" aria-hidden="true" /></p><p className="micro muted hero-process">{portfolio.hero.process}</p></div>
+      <div><p className="role-line"><span className="orange">&gt;</span> {portfolio.role}<span className="cursor-block" aria-hidden="true" /></p><p className="hero-value">{portfolio.hero.discipline}</p></div>
       <a className="contact-button" href="#contact"><span className="solid-dot" />{portfolio.hero.contact}<Arrow /></a>
     </div>
     <BottomBar />
-    <div className="hero-foot micro"><span>{portfolio.version}</span><a href="#about">{portfolio.hero.scroll}<Arrow direction="down" /></a></div>
+    <div className="hero-foot micro"><a href="#projects">{portfolio.hero.scroll}<Arrow direction="down" /></a></div>
   </section>
 }
