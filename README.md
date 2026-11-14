@@ -19,13 +19,13 @@ npm run preview
 
 ## Edit the content
 
-All portfolio content is in `src/data/portfolio.js`. StreetSmart, BOOKET, and Tandaverse deliberately retain stack TODOs. Unspecified certificate issuers are displayed as a dash. The Computer Systems Servicing date comes from the supplied résumé.
+All portfolio content, including the confirmed stacks for BOOKET, Tandaverse, and Warr-in Parfumerie, is in `src/data/portfolio.js`. Unspecified certificate issuers are displayed as a dash. The Computer Systems Servicing date comes from the supplied résumé.
 
 - Portrait: `public/warren-hero.png`, a transparent cutout sourced from `Profile pictures/Profile-cutout.png`. The original `Profile.jpg` is preserved.
 - Static halftone fallback: `public/warren-halftone.svg`.
 - Résumé: `public/resume.pdf`, rebuilt as a clean one-page PDF from the supplied résumé content. The original Word file is unchanged.
 - Screenshots: replace `public/projects/<slug>.jpg` with actual project screenshots. Current images are clearly labeled illustrated placeholders.
-- Project demo links: replace each project's `href: '#'` with a real URL. The UI shows a coming-soon label until then.
+- Project demo links: Warr-in Parfumerie links to its live 2025 site. Replace other projects' `href: '#'` with a real URL when available; unavailable links are hidden.
 - Rebuild the photo and placeholder assets with `npm run assets`. The transparent `Profile-cutout.png` must be present; alpha is preserved in both the photo and halftone fallback.
 
 ## Contact delivery

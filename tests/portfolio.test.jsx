@@ -111,6 +111,12 @@ describe('project case files', () => {
     await user.click(second)
     expect(second.getAttribute('aria-expanded')).toBe('false')
   })
+  it('opens the 2025 fragrance project and links to its live demo', async () => {
+    render(<MotionConfig reducedMotion="always"><Projects /></MotionConfig>)
+    await userEvent.setup().click(screen.getByRole('button', { name: /Warr-in Parfumerie/ }))
+    expect(screen.getByText('Sort the catalog and view individual product pages')).toBeTruthy()
+    expect(screen.getByRole('link', { name: /View live demo/ }).href).toBe('https://warr-in-parfumerie.vercel.app/')
+  })
 })
 
 describe('mobile navigation', () => {
@@ -174,12 +180,13 @@ describe('contact form', () => {
 
 describe('content and asset integrity', () => {
   it('keeps all project previews local and preserves the supplied project order', () => {
-    expect(portfolio.projects.map(project => project.name)).toEqual(['StreetSmart', 'RepSynk', 'BOOKET', 'Tandaverse'])
-    for (const project of portfolio.projects) expect(existsSync(`public${project.preview}`)).toBe(true)
+    expect(portfolio.projects.map(project => project.name)).toEqual(['StreetSmart', 'RepSynk', 'BOOKET', 'Tandaverse', 'Warr-in Parfumerie'])
+    for (const project of portfolio.projects) if (project.preview) expect(existsSync(`public${project.preview}`)).toBe(true)
     expect(existsSync(`public${portfolio.portrait}`)).toBe(true)
     expect(readFileSync(`public${portfolio.portraitFallback}`, 'utf8')).toContain('<circle')
     expect(readFileSync(`public${portfolio.resume}`).subarray(0, 4).toString()).toBe('%PDF')
-    expect(portfolio.log.certificates).toHaveLength(11)
+    expect(portfolio.log.certificates).toHaveLength(12)
+    expect(portfolio.log.certificates[0]).toEqual({ name: 'Software Development — IT Specialist', issuer: 'Certiport', date: 'NOV 12, 2026' })
     expect(portfolio.log.certificates.find(certificate => certificate.name.startsWith('Visual Graphic Design')).issuer).toBe('TESDA')
   })
 })
