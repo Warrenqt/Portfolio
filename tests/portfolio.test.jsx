@@ -86,14 +86,21 @@ describe('first-visit intro policy', () => {
 })
 
 describe('project case files', () => {
-  it('hides placeholder screenshots and unavailable links while keeping case files usable', async () => {
+  it('shows screenshot thumbnails and keeps case files usable', async () => {
     render(<Projects />)
     expect(document.querySelector('.project-preview')).toBeNull()
+    expect([...document.querySelectorAll('.project-visual-image img')].map(image => [image.getAttribute('src'), image.getAttribute('loading'), image.getAttribute('decoding'), image.getAttribute('alt')])).toEqual([
+      ['/projects/streetsmart.png', 'lazy', 'async', 'StreetSmart operations dashboard screenshot'],
+      ['/projects/repsynk.png', 'lazy', 'async', 'RepSynk fitness dashboard screenshot'],
+      ['/projects/booket.png', 'lazy', 'async', 'BOOKET library and bookstore dashboard screenshot'],
+      ['/projects/tandaverse.png', 'lazy', 'async', 'Tandaverse social feed screenshot'],
+      ['/projects/warrin.png', 'lazy', 'async', 'Warr-in Parfumerie storefront screenshot'],
+    ])
     await userEvent.setup().click(screen.getByRole('button', { name: /StreetSmart/ }))
     expect(screen.queryByText(/coming soon/i)).toBeNull()
     expect(screen.queryByText(/TODO:/)).toBeNull()
-    expect(document.querySelector('.case-links')).toBeNull()
-    expect(screen.getAllByText(/Solo developer/)).toHaveLength(4)
+    expect(screen.getByRole('link', { name: /View live demo/ }).getAttribute('href')).toBe('https://street-smart-web.vercel.app/login')
+    expect(screen.getAllByText(/Solo developer/)).toHaveLength(5)
   })
   it('opens and closes by keyboard, exposes the repository, and collapses the previous case', async () => {
     const user = userEvent.setup()
@@ -117,6 +124,30 @@ describe('project case files', () => {
     expect(screen.getByText('Sort the catalog and view individual product pages')).toBeTruthy()
     expect(screen.getByRole('link', { name: /View live demo/ }).href).toBe('https://warr-in-parfumerie.vercel.app/')
   })
+  it('keeps live demos primary, repository secondary, and project labels consistent', async () => {
+    const user = userEvent.setup()
+    render(<MotionConfig reducedMotion="always"><Projects /></MotionConfig>)
+    expect([...document.querySelectorAll('.project-category')].map(label => label.textContent)).toEqual([
+      'CAPSTONE / Solo developer', 'FITNESS PWA / Solo developer', 'WEB APPLICATION / Solo developer',
+      'SOCIAL APPLICATION / Solo developer', 'E-COMMERCE / Solo developer',
+    ])
+    for (const [name, url] of [['StreetSmart', 'https://street-smart-web.vercel.app/login'], ['RepSynk', 'https://repsynk.pages.dev/'], ['Tandaverse', 'http://tandaverse.site.je/index.php'], ['Warr-in Parfumerie', 'https://warr-in-parfumerie.vercel.app/']]) {
+      const link = screen.getByRole('link', { name: `Live ${name} demo` })
+      expect(link.getAttribute('href')).toBe(url)
+      expect(link.getAttribute('target')).toBe('_blank')
+      expect(link.getAttribute('rel')).toBe('noopener noreferrer')
+    }
+    expect(document.querySelector('#project-booket .project-live-link')).toBeNull()
+    await user.click(screen.getByRole('button', { name: /RepSynk/ }))
+    expect(screen.getByRole('link', { name: /View repository/ }).getAttribute('href')).toBe('https://github.com/Warrenqt/RepSynk')
+    expect(screen.getByRole('link', { name: /View live demo/ }).getAttribute('href')).toBe('https://repsynk.pages.dev/')
+  })
+  it('uses the monogram if a screenshot fails to load', () => {
+    render(<Projects />)
+    fireEvent.error(document.querySelector('#project-streetsmart img'))
+    expect(document.querySelector('#project-streetsmart .project-initials').textContent).toBe('SS')
+    expect(document.querySelector('#project-streetsmart img')).toBeNull()
+  })
 })
 
 describe('mobile navigation', () => {
@@ -139,6 +170,13 @@ describe('mobile navigation', () => {
 })
 
 describe('contact form', () => {
+  it('shows the remaining direct links without a phone row', () => {
+    render(<Contact />)
+    expect([...document.querySelectorAll('.direct-links > a, .direct-links > button')].map(link => link.querySelector('.micro').textContent)).toEqual([
+      'Email', 'GitHub', 'Facebook', 'Instagram',
+    ])
+    expect(document.querySelector('#contact').textContent).not.toContain('09063742673')
+  })
   it('keeps contact content visible before an intersection callback', () => {
     vi.spyOn(window, 'matchMedia').mockImplementation(query => ({ matches: false, media: query, addEventListener: vi.fn(), removeEventListener: vi.fn() }))
     render(<Contact />)
@@ -181,7 +219,10 @@ describe('contact form', () => {
 describe('content and asset integrity', () => {
   it('keeps all project previews local and preserves the supplied project order', () => {
     expect(portfolio.projects.map(project => project.name)).toEqual(['StreetSmart', 'RepSynk', 'BOOKET', 'Tandaverse', 'Warr-in Parfumerie'])
-    for (const project of portfolio.projects) if (project.preview) expect(existsSync(`public${project.preview}`)).toBe(true)
+    for (const project of portfolio.projects) {
+      if (project.preview) expect(existsSync(`public${project.preview}`)).toBe(true)
+      if (project.image) expect(existsSync(`public${project.image}`)).toBe(true)
+    }
     expect(existsSync(`public${portfolio.portrait}`)).toBe(true)
     expect(readFileSync(`public${portfolio.portraitFallback}`, 'utf8')).toContain('<circle')
     expect(readFileSync(`public${portfolio.resume}`).subarray(0, 4).toString()).toBe('%PDF')
