@@ -11,19 +11,37 @@ export default function Nav() {
 
   useEffect(() => {
     const sections = portfolio.nav.map(({ id }) => document.getElementById(id)).filter(Boolean)
-    let pending = false
-    const update = () => {
-      pending = false
-      let current = 'home'
-      for (const section of sections) if (section.getBoundingClientRect().top <= window.innerHeight * 0.36) current = section.id
-      setActive(current)
+    if (!sections.length) return undefined
+    let frame = 0
+    const choose = () => {
+      if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) return sections.at(-1).id
+      const line = window.innerHeight * 0.35
+      let current = sections[0].id
+      for (const section of sections) if (section.getBoundingClientRect().top <= line) current = section.id
+      return current
     }
-    const onScroll = () => {
-      if (!pending) { pending = true; requestAnimationFrame(update) }
+    const apply = () => {
+      frame = 0
+      const next = choose()
+      setActive(prev => (prev === next ? prev : next))
     }
-    update()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(apply) }
+    // The observer's band is the requested 35%/60% inset. The active item is still
+    // the single section whose top has crossed 35% of the viewport, so a boundary
+    // that sits inside the band cannot mark two links.
+    const observer = 'IntersectionObserver' in window
+      ? new IntersectionObserver(schedule, { rootMargin: '-35% 0px -60% 0px', threshold: [0, 1] })
+      : null
+    sections.forEach(section => observer?.observe(section))
+    apply()
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule)
+    return () => {
+      if (frame) cancelAnimationFrame(frame)
+      observer?.disconnect()
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+    }
   }, [])
 
   useEffect(() => {

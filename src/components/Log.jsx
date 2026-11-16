@@ -10,7 +10,7 @@ export default function Log() {
   return <section id="log" className="section-shell content-section" tabIndex={-1}>
     <SectionLabel label={log.label} />
     <Reveal className="section-heading-row"><Heading>{log.title}</Heading><p className="stack-command">{log.command}</p></Reveal>
-    <div className="log-layout"><div className="log-aside"><span className="micro">{log.branch}</span><p>{log.asOfYear - log.startedYear} {log.stats.years}<br />{log.certificates.length} {log.stats.certificates}<br />{internships} {internships === 1 ? log.stats.internship : log.stats.internships}</p><span className="micro muted">{log.period}</span></div>
+    <div className="log-layout"><div className="log-aside"><span className="micro">{log.branch}</span><p>{log.stats.since} {log.startedYear}.<br />{log.certificates.length} {log.stats.certificates}<br />{internships} {internships === 1 ? log.stats.internship : log.stats.internships}</p><span className="micro muted">{log.period}</span></div>
       <ol className="timeline">{log.entries.map(entry => <li key={entry.hash}><Reveal className="log-entry"><span className="timeline-node" aria-hidden="true" /><div className="log-entry-top micro"><span className="commit-hash">{entry.hash}</span><span>{entry.type}</span><span className="commit-date">{entry.date}</span></div><h3>{entry.title}</h3><p className="log-subtitle">{entry.subtitle}</p><p className="log-details">{entry.details}</p></Reveal></li>)}</ol>
     </div>
     <Reveal className="certificates"><div className="certifications-heading micro"><h3>{log.certTitle}</h3><span>{certificates.length} / {log.certificates.length} {log.entriesLabel}</span></div>

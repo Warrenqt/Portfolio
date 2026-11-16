@@ -12,14 +12,14 @@ export function BottomBar() {
 
 export default function Hero({ phase }) {
   return <section id="home" className="hero section-shell" tabIndex={-1} aria-label="Introduction">
-    <div className="hero-meta micro"><span>{portfolio.edition}</span><span className="coordinates">{portfolio.coordinates}</span></div>
+    <div className="hero-meta micro"><span>{portfolio.edition}</span></div>
     <div className="hero-stage">
       <span className="hero-side-label micro" aria-hidden="true">{portfolio.hero.label}</span>
       <div className="portrait-composition"><HalftonePortrait active={phase !== 'intro'} animate={phase === 'reveal'} /><HeroName /></div>
     </div>
     <div className="hero-under">
       <div><p className="role-line"><span className="orange">&gt;</span> {portfolio.role}<span className="cursor-block" aria-hidden="true" /></p><p className="hero-value">{portfolio.hero.discipline}</p></div>
-      <a className="contact-button" href="#contact"><span className="solid-dot" />{portfolio.hero.contact}<Arrow /></a>
+      <div className="hero-actions"><a className="contact-button" href="#contact"><span className="solid-dot" />{portfolio.hero.contact}<Arrow /></a><a className="contact-button resume-button" href={portfolio.resume} target="_blank" rel="noopener noreferrer">RESUME<Arrow /></a></div>
     </div>
     <BottomBar />
     <div className="hero-foot micro"><a href="#projects">{portfolio.hero.scroll}<Arrow direction="down" /></a></div>

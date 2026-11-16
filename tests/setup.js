@@ -8,4 +8,8 @@ globalThis.IntersectionObserver = class {
   unobserve() {}
   disconnect() {}
 }
-afterEach(() => { cleanup(); vi.restoreAllMocks() })
+globalThis.ResizeObserver = class { observe() {} disconnect() {} }
+// jsdom does not implement the native dialog top layer.
+HTMLDialogElement.prototype.showModal = function () { this.setAttribute('open', '') }
+HTMLDialogElement.prototype.close = function () { this.removeAttribute('open') }
+afterEach(() => { cleanup(); window.history.replaceState(null, '', '/'); vi.restoreAllMocks() })

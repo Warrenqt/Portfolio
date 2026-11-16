@@ -100,23 +100,32 @@ describe('project case files', () => {
     expect(screen.queryByText(/coming soon/i)).toBeNull()
     expect(screen.queryByText(/TODO:/)).toBeNull()
     expect(screen.getByRole('link', { name: /View live demo/ }).getAttribute('href')).toBe('https://street-smart-web.vercel.app/login')
-    expect(screen.getAllByText(/Solo developer/)).toHaveLength(5)
+    expect(screen.getAllByText(/Solo developer/)).toHaveLength(6)
   })
-  it('opens and closes by keyboard, exposes the repository, and collapses the previous case', async () => {
+  it('opens by keyboard, traps focus, and restores the opener when closed', async () => {
     const user = userEvent.setup()
     render(<MotionConfig reducedMotion="always"><Projects /></MotionConfig>)
     const first = screen.getByRole('button', { name: /StreetSmart/ })
     first.focus()
     await user.keyboard('{Enter}')
-    expect(first.getAttribute('aria-expanded')).toBe('true')
+    expect(window.location.hash).toBe('#project/streetsmart')
+    expect(screen.getByRole('dialog', { name: 'StreetSmart' })).toBeTruthy()
     expect(screen.getByText('Photo verification with a LiteRT road-defect model')).toBeTruthy()
+    const close = screen.getByRole('button', { name: /CLOSE/ })
+    expect(document.activeElement).toBe(close)
+    await user.tab({ shift: true })
+    expect(document.activeElement).toBe(screen.getByRole('link', { name: /View live demo/ }))
+    await user.tab()
+    expect(document.activeElement).toBe(close)
+    await user.click(close)
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+    await waitFor(() => expect(document.activeElement).toBe(first))
     const second = screen.getByRole('button', { name: /RepSynk/ })
     await user.click(second)
-    expect(first.getAttribute('aria-expanded')).toBe('false')
-    expect(second.getAttribute('aria-expanded')).toBe('true')
-    expect(screen.getByRole('link', { name: /View repository/ }).href).toBe('https://github.com/Warrenqt/RepSynk')
-    await user.click(second)
-    expect(second.getAttribute('aria-expanded')).toBe('false')
+    expect(screen.getByRole('dialog', { name: 'RepSynk' })).toBeTruthy()
+    expect(portfolio.projects.find(project => project.slug === 'repsynk').repo).toBe('https://github.com/Warrenqt/RepSynk')
+    fireEvent(screen.getByRole('dialog'), new Event('cancel', { bubbles: true, cancelable: true }))
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
   })
   it('opens the 2025 fragrance project and links to its live demo', async () => {
     render(<MotionConfig reducedMotion="always"><Projects /></MotionConfig>)
@@ -131,7 +140,7 @@ describe('project case files', () => {
       'CAPSTONE / Solo developer', 'FITNESS PWA / Solo developer', 'WEB APPLICATION / Solo developer',
       'SOCIAL APPLICATION / Solo developer', 'E-COMMERCE / Solo developer',
     ])
-    for (const [name, url] of [['StreetSmart', 'https://street-smart-web.vercel.app/login'], ['RepSynk', 'https://repsynk.pages.dev/'], ['Tandaverse', 'http://tandaverse.site.je/index.php'], ['Warr-in Parfumerie', 'https://warr-in-parfumerie.vercel.app/']]) {
+    for (const [name, url] of [['StreetSmart', 'https://street-smart-web.vercel.app/login'], ['RepSynk', 'https://repsynk.pages.dev/'], ['Tandaverse', 'https://tandaverse.site.je/index.php'], ['Warr-in Parfumerie', 'https://warr-in-parfumerie.vercel.app/']]) {
       const link = screen.getByRole('link', { name: `Live ${name} demo` })
       expect(link.getAttribute('href')).toBe(url)
       expect(link.getAttribute('target')).toBe('_blank')
@@ -139,7 +148,7 @@ describe('project case files', () => {
     }
     expect(document.querySelector('#project-booket .project-live-link')).toBeNull()
     await user.click(screen.getByRole('button', { name: /RepSynk/ }))
-    expect(screen.getByRole('link', { name: /View repository/ }).getAttribute('href')).toBe('https://github.com/Warrenqt/RepSynk')
+    expect(portfolio.projects.find(project => project.slug === 'repsynk').repo).toBe('https://github.com/Warrenqt/RepSynk')
     expect(screen.getByRole('link', { name: /View live demo/ }).getAttribute('href')).toBe('https://repsynk.pages.dev/')
   })
   it('uses the monogram if a screenshot fails to load', () => {
@@ -147,6 +156,17 @@ describe('project case files', () => {
     fireEvent.error(document.querySelector('#project-streetsmart img'))
     expect(document.querySelector('#project-streetsmart .project-initials').textContent).toBe('SS')
     expect(document.querySelector('#project-streetsmart img')).toBeNull()
+  })
+  it('opens deep links directly and closes a BOOKET case without leaving the site', async () => {
+    window.history.replaceState(null, '', '#project/booket')
+    render(<Projects />)
+    const dialog = screen.getByRole('dialog', { name: 'BOOKET' })
+    expect(dialog.querySelector('a')).toBeNull()
+    expect(dialog.querySelectorAll('li')).toHaveLength(3)
+    expect(document.querySelector('.project-tile-index')).toBeNull()
+    await userEvent.setup().click(screen.getByRole('button', { name: /CLOSE/ }))
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(window.location.hash).toBe('#projects')
   })
 })
 

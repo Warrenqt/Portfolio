@@ -8,7 +8,6 @@ export const portfolio = {
   email: 'warrenpanergayo@gmail.com',
   location: 'San Pablo City, Laguna, Philippines',
   locationShort: 'San Pablo City, PH',
-  coordinates: '14.0693° N / 121.3256° E',
   timezone: 'Asia/Manila',
   status: 'Available for internships',
   edition: 'Portfolio — Vol. 01 / 2026',
@@ -53,7 +52,7 @@ export const portfolio = {
   projectsHeading: { label: '[02] ~/projects', title: 'SELECTED WORK', note: 'FIVE PROJECTS. PLENTY OF LESSONS.', hint: 'SELECT A PROJECT TO OPEN THE CASE FILE', preview: 'SCREENSHOT COMING SOON', view: 'Details', close: 'Close', repo: 'View repository', live: 'View live demo', liveLabel: 'Live', demo: 'Live demo coming soon', problem: 'The problem', built: 'What I built', features: 'Key features', challenge: 'Key challenge & how I solved it', stack: 'Stack' },
   projects: [
     {
-      slug: 'streetsmart', name: 'StreetSmart', initials: 'SS', category: '01 / CAPSTONE',
+      slug: 'streetsmart', name: 'StreetSmart', initials: 'SS', category: '01 / CAPSTONE', tone: 'light',
       description: 'Turn community road reports into verified, mapped maintenance insights.',
       role: 'Solo developer', tags: ['Next.js', 'React', 'TypeScript', 'Supabase', 'Python'], stack: ['Next.js', 'React', 'TypeScript', 'Supabase', 'Python', 'Leaflet', 'LiteRT'],
       preview: '/projects/streetsmart.jpg', image: '/projects/streetsmart.png', imageAlt: 'StreetSmart operations dashboard screenshot', imageWidth: 975, imageHeight: 485, href: '#', live: 'https://street-smart-web.vercel.app/login', repo: null,
@@ -81,17 +80,19 @@ export const portfolio = {
       preview: '/projects/booket.jpg', image: '/projects/booket.png', imageAlt: 'BOOKET library and bookstore dashboard screenshot', imageWidth: 624, imageHeight: 297, href: '#', repo: null,
       problem: 'Libraries and bookstores need an organized way to handle their day-to-day transactions.',
       built: 'A web-based system for managing library and bookstore transactions.',
+      // TODO: Warren — verify
       features: ['Library transaction management', 'Bookstore transaction management', 'Browser-based workflow'],
       challenge: 'Keeping library and bookstore transactions organized in one web app. I used Laravel Eloquent with MySQL to manage the data and Blade templates to present the workflows.',
     },
     {
-      slug: 'tandaverse', name: 'Tandaverse', initials: 'TV', category: '04 / SOCIAL APPLICATION',
+      slug: 'tandaverse', name: 'Tandaverse', initials: 'TV', category: '04 / SOCIAL APPLICATION', tone: 'light',
       description: 'Make social interaction easier for older people with readable, simple screens.',
       role: 'Solo developer', tags: ['PHP', 'MySQL', 'HTML', 'CSS', 'JavaScript'],
       stack: ['PHP (no framework)', 'MySQL', 'PHP PDO', 'HTML', 'CSS', 'JavaScript', 'Font Awesome (CDN)', 'PHP sessions (login)', 'Local uploads/ (images)', 'XAMPP (Apache + MySQL)'],
-      preview: '/projects/tandaverse.jpg', image: '/projects/tandaverse.png', imageAlt: 'Tandaverse social feed screenshot', imageWidth: 624, imageHeight: 309, href: '#', live: 'http://tandaverse.site.je/index.php', repo: null,
+      preview: '/projects/tandaverse.jpg', image: '/projects/tandaverse.png', imageAlt: 'Tandaverse social feed screenshot', imageWidth: 624, imageHeight: 309, href: '#', live: 'https://tandaverse.site.je/index.php', repo: null,
       problem: 'Complex interfaces and small type can make social platforms harder for older people to use.',
       built: 'A familiar social media application with an accessibility-first approach for older people.',
+      // TODO: Warren — verify
       features: ['Large, readable type', 'Simple navigation', 'Accessibility-first interface'],
       challenge: 'Making a social app easier for older people to use while supporting accounts and photos. I kept type readable and navigation simple, used PHP sessions for login, and stored uploaded images locally.',
     },
@@ -99,15 +100,23 @@ export const portfolio = {
       slug: 'warr-in-parfumerie', name: 'Warr-in Parfumerie', initials: 'WP', category: '05 / E-COMMERCE',
       description: 'Explore a curated fragrance catalog with filters, product pages, and a shopping bag.',
       role: 'Solo developer', tags: ['HTML', 'Bootstrap 5', 'jQuery', 'jsPDF'],
-      stack: ['HTML (~25 static pages)', 'CSS (single style.css)', 'Bootstrap 5', 'JavaScript', 'jQuery (search, hover, add to cart)', 'localStorage (cart)', 'jsPDF (checkout receipts)', 'Popper (loaded separately)', 'No app framework or build step'],
+      stack: [
+        // TODO: Warren — verify
+        'HTML (~25 static pages)',
+        'CSS (single style.css)', 'Bootstrap 5', 'JavaScript', 'jQuery (search, hover, add to cart)', 'localStorage (cart)', 'jsPDF (checkout receipts)', 'Popper (loaded separately)', 'No app framework or build step',
+      ],
       preview: null, image: '/projects/warrin.png', imageAlt: 'Warr-in Parfumerie storefront screenshot', imageWidth: 1440, imageHeight: 1000, href: 'https://warr-in-parfumerie.vercel.app/', repo: null,
       problem: 'Finding a fragrance across different brands and styles calls for a clear way to browse and compare scents.',
+      // TODO: Warren — verify
       built: 'A 2025 fragrance storefront featuring a 20-scent catalog for men, women, and everyone.',
       features: ['Browse and filter fragrances by category', 'Sort the catalog and view individual product pages', 'Add fragrances to a shopping bag'],
+      // TODO: Warren — verify
       challenge: 'Keeping the shopping bag available across roughly 25 static pages without an app framework. I used localStorage to persist cart contents, jQuery for add-to-cart interactions, and jsPDF for checkout receipts.',
     },
   ],
   stack: {
+    primary: ['React', 'Laravel', 'PHP', 'Python'],
+    installMarquee: '$ npm i react ✓ laravel ✓ python ✓ flask ✓ supabase ✓ tensorflow.js ✓ mysql ✓ next.js ✓',
     label: '[04] ~/stack', title: 'STACK', command: '$ npm ls --depth=0 warren', note: 'THE TOOLS CHANGE. THE CURIOSITY STAYS.',
     groups: [
       { title: 'Languages & frameworks', items: ['C#', 'HTML', 'CSS', 'JavaScript', 'PHP', 'Python', 'Java', 'React', 'React Native', 'Laravel', 'Node.js', 'Flask'] },
@@ -127,7 +136,7 @@ export const portfolio = {
   },
   log: {
     label: '[05] ~/log', title: 'LOG', command: '$ git log --oneline --journey', note: 'LEARNING, COMMIT BY COMMIT.',
-    startedYear: 2021, asOfYear: 2026, stats: { years: 'years building.', certificates: 'certifications.', internship: 'internship.', internships: 'internships.' },
+    startedYear: 2021, asOfYear: 2026, stats: { since: 'Coding since', certificates: 'certifications.', internship: 'internship.', internships: 'internships.' },
     showAll: 'SHOW ALL', showLess: 'SHOW LESS', entriesLabel: 'ENTRIES', tableLabel: 'Certifications and training',
     branch: 'HEAD → MAIN', aside: ['Always a', 'work in', 'progress.'], period: '2021 — NOW',
     entries: [

@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
     "check": "vitest run",
-    "assets": "node scripts/prepare-assets.mjs"
+    "assets": "node scripts/prepare-assets.mjs",
+    "og": "node scripts/generate-og.mjs"
   },
   "dependencies": {
     "@fontsource/archivo-black": "^5.3.0",
